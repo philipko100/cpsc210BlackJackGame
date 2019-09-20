@@ -1,23 +1,25 @@
 package ui;
 
-import Generate.Generate;
-import Checking.Check;
-import Generate.Puzzle;
+import generate.Generate;
+import checking.Check;
+import generate.Puzzle;
 
 import java.util.Scanner;
 
 public class Main {
 
-    public void statePuzzle(String puzzle){
-        System.out.println("Hi there! I will give you a series of numbers and you will enter a number that you believe best fit the pattern.");
+    public void statePuzzle(String puzzle) {
+        System.out.println("Hi there! I will give you a series of numbers and you "
+                + "will enter a number that you believe best fit the pattern.");
         System.out.println(puzzle);
     }
 
-    public void stateAnswer(boolean isCorrect){
-        if(isCorrect)
+    public void stateAnswer(boolean isCorrect) {
+        if (isCorrect) {
             System.out.println("You are correct! Well done!");
-        else
+        } else {
             System.out.println("Unfortunately, you are incorrect.");
+        }
     }
 
     public static void main(String[] args) {

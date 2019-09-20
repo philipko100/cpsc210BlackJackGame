@@ -1,11 +1,11 @@
-package Generate;
+package generate;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Generate {
 
-    public String randomize(){
+    public String randomize() {
         Random random = new Random();
         ArrayList<String> puzzles = new ArrayList<String>();
 
