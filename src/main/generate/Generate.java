@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Generate {
 
+    // EFFECTS: return a randomized puzzle
     public String randomize() {
         Random random = new Random();
         ArrayList<String> puzzles = new ArrayList<String>();

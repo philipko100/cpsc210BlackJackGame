@@ -3,6 +3,7 @@ package checking;
 public class Check {
     public String[] puzzles = {"1 2 3 4 5 ...", "2 4 6 8 10 ...", "3 5 7 9 11 ..."};
 
+    // EFFECTS: check which puzzle was given and whether the user was correct
     public boolean check(String puzzle, String answer) {
         for (int i = 0; i < puzzles.length; i++) {
             if (puzzles[i].equals(puzzle)) {

@@ -8,12 +8,14 @@ import java.util.Scanner;
 
 public class Main {
 
+    // EFFECTS: it states the puzzle for the user
     public void statePuzzle(String puzzle) {
         System.out.println("Hi there! I will give you a series of numbers and you "
                 + "will enter a number that you believe best fit the pattern.");
         System.out.println(puzzle);
     }
 
+    // EFFECTS: prints out whether the user matched the puzzle correctly
     public void stateAnswer(boolean isCorrect) {
         if (isCorrect) {
             System.out.println("You are correct! Well done!");
