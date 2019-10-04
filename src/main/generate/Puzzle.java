@@ -2,11 +2,19 @@ package generate;
 
 import checking.Check;
 
-public class Puzzle extends Problem {
+public class Puzzle implements Problem {
+
+    private String problem;
 
     // EFFECTS: constructs a puzzle with the given puzzle string
     public Puzzle(String puzzle) {
-        super(puzzle);
+        this.problem = puzzle;
+    }
+
+    // EFFECTS: returns the puzzle
+    @Override
+    public String getProblem() {
+        return problem;
     }
 
     // EFFECTS: return whether user answer is correct

@@ -4,6 +4,9 @@ import generate.Generate;
 import checking.Check;
 import generate.Puzzle;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class Main {
@@ -24,7 +27,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 
         Generate generator = new Generate();
         Main main = new Main();
@@ -32,9 +35,22 @@ public class Main {
         Puzzle puzzle = new Puzzle(generator.randomize());
         main.statePuzzle(puzzle.getProblem());
 
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        String answer = myObj.nextLine();  // Read user input
-        main.stateAnswer(puzzle.isCorrect(answer));
+        Scanner myObj;
+
+        PrintWriter writer = new PrintWriter("puzzleProgress.txt", "UTF-8");
+        writer.println(puzzle.getProblem());
+
+        do {
+            System.out.println("Enter quit to end the program");
+            myObj = new Scanner(System.in);  // Create a Scanner object
+            String answer = myObj.nextLine();  // Read user input
+            main.stateAnswer(puzzle.isCorrect(answer));
+            writer.println(puzzle.isCorrect(answer));
+            puzzle = new Puzzle(generator.randomize());
+            main.statePuzzle(puzzle.getProblem());
+        } while (!myObj.equals("quit"));
+
+        writer.close();
 
     }
 }

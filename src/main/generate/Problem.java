@@ -1,21 +1,11 @@
 package generate;
 
 
-public class Problem {
-    protected String problem;
-
-    // EFFECTS: constructs a puzzle with the given puzzle string
-    public Problem(String problem) {
-        this.problem = problem;
-    }
+public interface Problem {
 
     // EFFECTS: returns the puzzle
-    public String getProblem() {
-        return this.problem;
-    }
+    public String getProblem();
 
     // EFFECTS: return whether user answer is correct
-    public boolean isCorrect(String answer) {
-        return true;
-    }
+    public boolean isCorrect(String answer);
 }

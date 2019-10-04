@@ -11,8 +11,6 @@ public class Generate {
         ArrayList<String> puzzles = new ArrayList<String>();
 
         puzzles.add("1 2 3 4 5 ...");
-        puzzles.add("2 4 6 8 10 ...");
-        puzzles.add("3 5 7 9 11 ...");
         return puzzles.get(random.nextInt(3));
     }
 }
