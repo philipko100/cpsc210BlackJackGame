@@ -30,7 +30,7 @@ public class Main {
         Main main = new Main();
 
         Puzzle puzzle = new Puzzle(generator.randomize());
-        main.statePuzzle(puzzle.getPuzzle());
+        main.statePuzzle(puzzle.getProblem());
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         String answer = myObj.nextLine();  // Read user input
