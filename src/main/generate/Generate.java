@@ -1,16 +1,19 @@
 package generate;
 
+import game.BlackJ;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Generate {
 
-    // EFFECTS: return a randomized puzzle
-    public String randomize() {
+    //EFFECTS: generate a random card if it has not been used 4 times already
+    public int deal(BlackJ game) {
         Random random = new Random();
-        ArrayList<String> puzzles = new ArrayList<String>();
-
-        puzzles.add("1 2 3 4 5 ...");
-        return puzzles.get(random.nextInt(3));
+        int newCard = random.nextInt(13) + 1;
+        while (game.check(newCard)) {
+            newCard = random.nextInt(13) + 1;
+        }
+        return newCard;
     }
 }

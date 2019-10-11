@@ -1,56 +1,65 @@
 package ui;
 
-import generate.Generate;
-import checking.Check;
-import generate.Puzzle;
+import game.BlackJ;
+import players.Player;
+import players.Dealer;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 public class Main {
 
     // EFFECTS: it states the puzzle for the user
-    public void statePuzzle(String puzzle) {
-        System.out.println("Hi there! I will give you a series of numbers and you "
-                + "will enter a number that you believe best fit the pattern.");
-        System.out.println(puzzle);
+    public int userChips() {
+        System.out.println("Hi there! I will be your dealer for Blackjack. "
+                + "Please enter a number of the value of chips you have brought.");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        return Integer.parseInt(input);
     }
 
-    // EFFECTS: prints out whether the user matched the puzzle correctly
-    public void stateAnswer(boolean isCorrect) {
-        if (isCorrect) {
-            System.out.println("You are correct! Well done!");
+    // EFFECTS: gets user choice on whether the user wants to continue playing
+    public boolean hitOrStop() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("If you would like to hit, type anything. Type stop to stop.");
+        String input = sc.nextLine();
+        return !input.equals("stop");
+    }
+
+    //MODIFIES: this
+    //EFFECTS: communicate with user to store user's bet
+    public void intakeBet(Player player) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("How much would you like to bet this round?");
+        String input = sc.nextLine();
+        int bet = Integer.parseInt(input);
+        player.bet(bet);
+    }
+
+    public boolean continuePlaying(Player player, String result) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(result + ": Your new net worth: " + player.getChips()
+                + ". Would you like to keep playing? Type stop to stop and anything to keep going.");
+        if (sc.nextLine().equals("stop")) {
+            return false;
         } else {
-            System.out.println("Unfortunately, you are incorrect.");
+            return true;
         }
     }
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 
-        Generate generator = new Generate();
+        int dealerMoney = 10000;
+
         Main main = new Main();
+        Dealer dealer = new Dealer(dealerMoney);
+        Player player = new Player(main.userChips());
+        BlackJ game = new BlackJ();
 
-        Puzzle puzzle = new Puzzle(generator.randomize());
-        main.statePuzzle(puzzle.getProblem());
-
-        Scanner myObj;
-
-        PrintWriter writer = new PrintWriter("puzzleProgress.txt", "UTF-8");
-        writer.println(puzzle.getProblem());
-
-        do {
-            System.out.println("Enter quit to end the program");
-            myObj = new Scanner(System.in);  // Create a Scanner object
-            String answer = myObj.nextLine();  // Read user input
-            main.stateAnswer(puzzle.isCorrect(answer));
-            writer.println(puzzle.isCorrect(answer));
-            puzzle = new Puzzle(generator.randomize());
-            main.statePuzzle(puzzle.getProblem());
-        } while (!myObj.equals("quit"));
-
-        writer.close();
+        dealer.bet(500);
+        game.addBet(dealer.getBet());
+        player.play(game, dealer);
 
     }
 }
