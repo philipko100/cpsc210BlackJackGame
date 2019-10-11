@@ -2,10 +2,13 @@ package placeholder;
 
 import game.BlackJ;
 
+import game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,6 +19,7 @@ public class GameTest {
     Player player;
     Dealer dealer;
     BlackJ game;
+    Game g;
     int dealerMoney;
     int userChips;
 
@@ -27,6 +31,7 @@ public class GameTest {
         dealer = new Dealer(dealerMoney);
         player = new Player(userChips);
         game = new BlackJ();
+        g = new BlackJ();
     }
 
     @Test
@@ -37,6 +42,12 @@ public class GameTest {
         assertEquals(5, game.used(5));
         assertTrue(game.check(5));
         assertFalse(game.check(1));
+
+        int[] usedTimes = game.getUsedTimes();
+        assertEquals(4, usedTimes[5-1]);
+        ArrayList<Integer> usedCards = game.getUsedCards();
+        assertTrue(usedCards.contains(5));
+
         game.reset();
         assertFalse(game.check(5));
     }

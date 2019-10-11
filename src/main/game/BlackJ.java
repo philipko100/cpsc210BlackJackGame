@@ -15,6 +15,17 @@ public class BlackJ extends Game {
         }
     }
 
+
+    //EFFECTS: return used card list
+    public ArrayList<Integer> getUsedCards() {
+        return usedCards;
+    }
+
+    //EFFECTS: return array of the used cards
+    public int[] getUsedTimes() {
+        return usedTimes;
+    }
+
     // MODIFIES: this
     // EFFECTS: adds the double the amount of a player's bet to the table
     @Override
