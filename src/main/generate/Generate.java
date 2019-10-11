@@ -5,7 +5,13 @@ import game.BlackJ;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Generate {
+public class Generate extends Randomize {
+
+    //EFFECTS: returns a random card number
+    public int deal() {
+        Random random = new Random();
+        return random.nextInt(13) + 1;
+    }
 
     //EFFECTS: generate a random card if it has not been used 4 times already
     public int deal(BlackJ game) {
