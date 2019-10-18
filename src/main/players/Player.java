@@ -1,5 +1,9 @@
 package players;
 
+import exceptions.CardSumException;
+import exceptions.NotRealBetException;
+import exceptions.NotRealChipOutcome;
+import exceptions.NotRealMoneyException;
 import game.BlackJ;
 import generate.Generate;
 import ui.Main;
@@ -9,9 +13,9 @@ import java.util.Scanner;
 
 public class Player implements Person, Play {
     private int chips = 0;
-    private int bet = 0;
+    public int bet = 0;
     private ArrayList<Integer> cards = new ArrayList<Integer>();
-    private int cardSum = 0;
+    public int cardSum = 0;
 
     // MODIFIES: this
     // EFFECTS: initialize person with their net worth
@@ -25,9 +29,15 @@ public class Player implements Person, Play {
     }
 
     //MODIFIES: this
-    //REQUIRES: bet is less than net worth and not negative
+    //REQUIRES: bet is less than net worth and larger than 0
     //EFFECTS: get and store how much this person bets in the current game
-    public void bet(int bet) {
+    public void bet(int bet) throws NotRealBetException {
+        if (bet > chips || bet < 0) {
+            throw new NotRealBetException();
+        }
+        if (bet == 0) {
+            this.bet = 0;
+        }
         this.bet += bet;
     }
 
@@ -71,7 +81,10 @@ public class Player implements Person, Play {
 
     // MODIFIES: this
     // EFFECTS: add the amount of money to its net worth
-    public void addOrMinusChips(int chips) {
+    public void addOrMinusChips(int chips) throws NotRealChipOutcome {
+        if (this.chips + chips < 0) {
+            throw new NotRealChipOutcome();
+        }
         this.chips += chips;
     }
 
@@ -91,7 +104,7 @@ public class Player implements Person, Play {
                 this.hit(game);
                 dealer.hostPlay(game);
             }
-            String result = game.chooseWinner(this.getCardSum(), dealer.getCardSum());
+            String result = getWinner(game, dealer);
             arrangeWinnings(result, game, dealer);
             if (!main.continuePlaying(this, result)) {
                 break;
@@ -99,10 +112,19 @@ public class Player implements Person, Play {
         }
     }
 
+    //EFFECTS: gets the winner of the game, if error returns ERROR
+    public String getWinner(BlackJ game, Dealer dealer) {
+        try {
+            return game.chooseWinner(this.getCardSum(), dealer.getCardSum());
+        } catch (CardSumException e) {
+            return "ERROR";
+        }
+    }
+
     //MODIFIES: this and Dealer.cardSum
     //EFFECTS: resets all bets and cardSums
-    public void reset(Dealer dealer, BlackJ game) {
-        this.bet = 0;
+    public void reset(Dealer dealer, BlackJ game) throws NotRealBetException {
+        bet(0);
         this.cardSum = 0;
         dealer.resetSum();
         game.reset();
@@ -111,14 +133,23 @@ public class Player implements Person, Play {
     //MODIFIES: this
     //EFFECTS: changes the net worth of each player based on who won
     public void arrangeWinnings(String result, BlackJ game, Dealer dealer) {
-        if (result.equals("player wins")) {
-            this.addOrMinusChips(game.getTotalBet());
-            dealer.addOrMinusChips(-dealer.getBet());
-        } else if (result.equals("dealer wins")) {
-            this.addOrMinusChips(-this.getBet());
-            dealer.addOrMinusChips(game.getTotalBet());
+        try {
+            if (result.equals("player wins")) {
+                this.addOrMinusChips(game.getTotalBet());
+                dealer.addOrMinusChips(-dealer.getBet());
+            } else if (result.equals("dealer wins")) {
+                this.addOrMinusChips(-this.getBet());
+                dealer.addOrMinusChips(game.getTotalBet());
+            }
+            reset(dealer, game);
+        } catch (NotRealMoneyException e) {
+            if (result.equals("player wins")) {
+                System.out.println("You did so well that you bankrupted the dealer");
+            } else if (result.equals("dealer wins")) {
+                chips = 0;
+                System.out.println("You have lost all your money");
+            }
         }
-        reset(dealer, game);
     }
 
     private void hit(BlackJ game) {

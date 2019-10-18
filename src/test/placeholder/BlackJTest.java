@@ -1,5 +1,8 @@
 package placeholder;
 
+import exceptions.NotRealBetException;
+import exceptions.NotRealChipOutcome;
+import exceptions.NotRealException;
 import game.BlackJ;
 
 import game.Game;
@@ -8,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BlackJTest {
 
@@ -32,11 +33,33 @@ public class BlackJTest {
 
     @Test
     void testBet() {
-        player.bet(1000);
-        assertEquals(1000, player.getBet());
+        boolean playerEx = false;
+        boolean dealerEx = false;
+        try {
+            player.bet(1000);
+            assertEquals(1000, player.getBet());
 
-        dealer.bet(1000);
-        assertEquals(1000, dealer.getBet());
+            dealer.bet(1000);
+            assertEquals(1000, dealer.getBet());
+        } catch (NotRealBetException e) {
+            fail("All the bets are legit.");
+        }
+        try {
+            player.bet(-10);
+        } catch (NotRealBetException e) {
+            // I should catch this exception.
+            assertTrue(true);
+            playerEx = true;
+        }
+        assertTrue(playerEx);
+        try {
+            dealer.bet(-10);
+        } catch (NotRealBetException e) {
+            // I should catch this exception.
+            assertTrue(true);
+            dealerEx = (true);
+        }
+        assertTrue(dealerEx);
     }
 
     @Test
@@ -70,48 +93,87 @@ public class BlackJTest {
 
     @Test
     void testAddOrMinusChips() {
-        player.addOrMinusChips(500);
-        assertEquals(userChips+500, player.getChips());
-        player.addOrMinusChips(-500);
-        assertEquals(userChips, player.getChips());
+        try {
+            player.addOrMinusChips(500);
+            assertEquals(userChips + 500, player.getChips());
+            player.addOrMinusChips(-500);
+            assertEquals(userChips, player.getChips());
 
-        dealer.addOrMinusChips(500);
-        assertEquals(dealerMoney+500, dealer.getChips());
-        dealer.addOrMinusChips(-500);
-        assertEquals(dealerMoney, dealer.getChips());
+            dealer.addOrMinusChips(500);
+            assertEquals(dealerMoney + 500, dealer.getChips());
+            dealer.addOrMinusChips(-500);
+            assertEquals(dealerMoney, dealer.getChips());
+        } catch (NotRealChipOutcome e) {
+            fail();
+        }
+        try {
+            player.addOrMinusChips(-userChips-100);
+        } catch (NotRealChipOutcome e) {
+            assertTrue(true);
+        }
+        try {
+            dealer.addOrMinusChips(-dealerMoney-100);
+        } catch (NotRealChipOutcome e) {
+            assertTrue(true);
+        }
     }
 
 
 
     @Test
     void testReset() {
-        player.bet(1000);
-        player.dealtCard(game);
-        dealer.dealtCard(game);
-        player.reset(dealer, game);
-        assertEquals(0, player.getBet());
-        assertEquals(0, player.getCardSum());
-        assertEquals(0, dealer.getCardSum());
-        assertEquals(0, game.getTotalBet());
+        try {
+            player.bet(1000);
+            player.dealtCard(game);
+            dealer.dealtCard(game);
+            player.reset(dealer, game);
+            assertEquals(0, player.getBet());
+            assertEquals(0, player.getCardSum());
+            assertEquals(0, dealer.getCardSum());
+            assertEquals(0, game.getTotalBet());
+        } catch (NotRealException e) {
+            fail();
+        }
     }
 
     @Test
     void testArrangeWinnings() {
+        try {
+            game.addBet(1000);
+            dealer.bet(500);
+            player.bet(1000);
+            String result = "player wins";
+            player.arrangeWinnings(result, game, dealer);
+            assertEquals(userChips + 1000 * 2, player.getChips());
+            assertEquals(dealerMoney - 500, dealer.getChips());
+
+            game.addBet(1000);
+            dealer.bet(500);
+            player.bet(1000);
+            result = "dealer wins";
+            player.arrangeWinnings(result, game, dealer);
+            assertEquals(dealerMoney - 500 + 1000 * 2, dealer.getChips());
+            assertEquals(userChips + 1000 * 2 - 1000, player.getChips());
+        } catch (NotRealException e) {
+            fail();
+        }
+        int previousPMoney = player.getChips();
+        int previousDMoney = dealer.getChips();
         game.addBet(1000);
-        dealer.bet(500);
-        player.bet(1000);
+        dealer.bet = (dealer.getChips() + 1);
+        player.bet = (1000);
         String result = "player wins";
         player.arrangeWinnings(result, game, dealer);
-        assertEquals(userChips + 1000 * 2, player.getChips());
-        assertEquals(dealerMoney - 500, dealer.getChips());
+        assertEquals(previousDMoney, dealer.getChips());
+        assertEquals(previousPMoney + 1000 * 2, player.getChips());
 
-        game.addBet(1000);
-        dealer.bet(500);
-        player.bet(1000);
-        result = "dealer wins";
-        player.arrangeWinnings(result, game, dealer);
-        assertEquals(dealerMoney - 500  + 1000 * 2, dealer.getChips());
-        assertEquals(userChips + 1000 * 2 - 1000, player.getChips());
+            game.addBet(1000);
+            dealer.bet = 500;
+            player.bet = player.getChips() + 1;
+             result = "dealer wins";
+            player.arrangeWinnings(result, game, dealer);
+            assertEquals(0, player.getChips());
+            assertEquals(previousDMoney, dealer.getChips());
 
     }
 

@@ -1,5 +1,7 @@
 package players;
 
+import exceptions.NotRealBetException;
+import exceptions.NotRealChipOutcome;
 import game.BlackJ;
 import generate.Generate;
 
@@ -7,9 +9,9 @@ import java.util.ArrayList; // import the ArrayList class
 
 public class Dealer implements Person, Host {
     private int chips = 0;
-    private int bet = 0;
+    public int bet = 0;
     private ArrayList<Integer> cards = new ArrayList<Integer>();
-    private int cardSum = 0;
+    public int cardSum = 0;
     private boolean isUnder21 = true;
 
     // MODIFIES: this
@@ -26,7 +28,10 @@ public class Dealer implements Person, Host {
     //MODIFIES: this
     //REQUIRES: bet is less than net worth and not negative
     //EFFECTS: get and store how much this person bets in the current game
-    public void bet(int bet) {
+    public void bet(int bet) throws NotRealBetException {
+        if (bet > chips || bet < 0) {
+            throw new NotRealBetException();
+        }
         this.bet += bet;
     }
 
@@ -61,7 +66,10 @@ public class Dealer implements Person, Host {
 
     // MODIFIES: this
     // EFFECTS: add the amount of money to its net worth
-    public void addOrMinusChips(int chips) {
+    public void addOrMinusChips(int chips) throws NotRealChipOutcome {
+        if (this.chips + chips < 0) {
+            throw new NotRealChipOutcome();
+        }
         this.chips += chips;
     }
 

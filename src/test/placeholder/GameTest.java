@@ -1,5 +1,7 @@
 package placeholder;
 
+import exceptions.CardSumException;
+import exceptions.NotRealCardException;
 import game.BlackJ;
 
 import game.Game;
@@ -10,9 +12,7 @@ import players.Player;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
@@ -36,29 +36,105 @@ public class GameTest {
 
     @Test
     void testUsedAndCheckAndReset() {
-        assertEquals(5, game.used(5));
-        assertEquals(5, game.used(5));
-        assertEquals(5, game.used(5));
-        assertEquals(5, game.used(5));
-        assertTrue(game.check(5));
-        assertFalse(game.check(1));
+        try {
+            assertEquals(5, game.used(5));
+            assertEquals(5, game.used(5));
+            assertEquals(5, game.used(5));
+            assertEquals(5, game.used(5));
+            assertTrue(game.check(5));
+            assertFalse(game.check(1));
 
-        int[] usedTimes = game.getUsedTimes();
-        assertEquals(4, usedTimes[5-1]);
-        ArrayList<Integer> usedCards = game.getUsedCards();
-        assertTrue(usedCards.contains(5));
+            int[] usedTimes = game.getUsedTimes();
+            assertEquals(4, usedTimes[5 - 1]);
+            ArrayList<Integer> usedCards = game.getUsedCards();
+            assertTrue(usedCards.contains(5));
 
-        game.reset();
-        assertFalse(game.check(5));
+            game.reset();
+            assertFalse(game.check(5));
+        } catch (NotRealCardException e) {
+            fail();
+        }
+        boolean catchEx = false;
+        try {
+            game.check(15);
+        } catch (NotRealCardException e) {
+            catchEx = true;
+        }
+        assertTrue(catchEx);
+        catchEx = false;
+        try {
+            game.check(-5);
+        } catch (NotRealCardException e) {
+            catchEx = true;
+        }
+        assertTrue(catchEx);
+
     }
 
     @Test
     void testChooseWinner() {
-        assertTrue(game.chooseWinner(19,19).equals("draw"));
-        assertTrue(game.chooseWinner(21,21).equals("draw"));
-        assertTrue(game.chooseWinner(15,19).equals("dealer wins"));
-        assertTrue(game.chooseWinner(22,10).equals("dealer wins"));
-        assertTrue(game.chooseWinner(19,15).equals("player wins"));
-        assertTrue(game.chooseWinner(19,22).equals("player wins"));
+        try {
+            assertTrue(game.chooseWinner(19, 19).equals("draw"));
+            assertTrue(game.chooseWinner(21, 21).equals("draw"));
+            assertTrue(game.chooseWinner(15, 19).equals("dealer wins"));
+            assertTrue(game.chooseWinner(22, 10).equals("dealer wins"));
+            assertTrue(game.chooseWinner(19, 15).equals("player wins"));
+            assertTrue(game.chooseWinner(19, 22).equals("player wins"));
+        } catch (CardSumException e) {
+            fail();
+        }
+        boolean catchEx = false;
+        try {
+            game.chooseWinner(-1, 19);
+        } catch (CardSumException e) {
+            catchEx = true;
+        }
+        assertTrue(catchEx);
+        catchEx = false;
+        try {
+            game.chooseWinner(20, -1);
+        } catch (CardSumException e) {
+            catchEx = true;
+        }
+        assertTrue(catchEx);
+        catchEx = false;
+        try {
+            game.chooseWinner(-1, -2).equals("draw");
+        } catch (CardSumException e) {
+            catchEx = true;
+        }
+        assertTrue(catchEx);
+    }
+    @Test
+    void testGetWinner() {
+
+            player.cardSum = 19;
+            dealer.cardSum = 19;
+            assertTrue(player.getWinner(game, dealer).equals("draw"));
+            player.cardSum = 21;
+            dealer.cardSum = 21;
+            assertTrue(player.getWinner(game, dealer).equals("draw"));
+            player.cardSum = 15;
+            dealer.cardSum = 19;
+            assertTrue(player.getWinner(game, dealer).equals("dealer wins"));
+            player.cardSum = 22;
+            dealer.cardSum = 10;
+            assertTrue(player.getWinner(game, dealer).equals("dealer wins"));
+            player.cardSum = 19;
+            dealer.cardSum = 15;
+            assertTrue(player.getWinner(game, dealer).equals("player wins"));
+            player.cardSum = 19;
+            dealer.cardSum = 22;
+            assertTrue(player.getWinner(game, dealer).equals("player wins"));
+        player.cardSum = -1;
+        dealer.cardSum = 19;
+        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+        player.cardSum = 21;
+        dealer.cardSum = -1;
+        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+        player.cardSum = -21;
+        dealer.cardSum = -1;
+        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+
     }
 }

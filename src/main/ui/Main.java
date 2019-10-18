@@ -1,5 +1,7 @@
 package ui;
 
+import exceptions.NotRealBetException;
+import exceptions.NotRealException;
 import game.BlackJ;
 import players.Player;
 import players.Dealer;
@@ -34,7 +36,11 @@ public class Main {
         System.out.println("How much would you like to bet this round?");
         String input = sc.nextLine();
         int bet = Integer.parseInt(input);
-        player.bet(bet);
+        try {
+            player.bet(bet);
+        } catch (NotRealBetException e) {
+            System.out.println("Invalid bet");
+        }
     }
 
     public boolean continuePlaying(Player player, String result) {
@@ -52,14 +58,18 @@ public class Main {
 
         int dealerMoney = 10000;
 
-        Main main = new Main();
-        Dealer dealer = new Dealer(dealerMoney);
-        Player player = new Player(main.userChips());
-        BlackJ game = new BlackJ();
+        try {
+            Main main = new Main();
+            Dealer dealer = new Dealer(dealerMoney);
+            Player player = new Player(main.userChips());
+            BlackJ game = new BlackJ();
 
-        dealer.bet(500);
-        game.addBet(dealer.getBet());
-        player.play(game, dealer);
+            dealer.bet(500);
+            game.addBet(dealer.getBet());
+            player.play(game, dealer);
+        } catch (NotRealException e) {
+            System.out.println("There was a algorithmic error. Please Contact engineers.");
+        }
 
     }
 }

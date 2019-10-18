@@ -1,5 +1,6 @@
 package generate;
 
+import exceptions.NotRealCardException;
 import game.BlackJ;
 
 import java.util.ArrayList;
@@ -17,9 +18,15 @@ public class Generate extends Randomize {
     public int deal(BlackJ game) {
         Random random = new Random();
         int newCard = random.nextInt(13) + 1;
-        while (game.check(newCard)) {
-            newCard = random.nextInt(13) + 1;
+        try {
+            while (game.check(newCard)) {
+                newCard = random.nextInt(13) + 1;
+            }
+        } catch (NotRealCardException e) {
+            System.out.println("There is an error in the random card generator algorithm. "
+                    + "Please check with the engineers");
+        } finally {
+            return newCard;
         }
-        return newCard;
     }
 }

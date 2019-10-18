@@ -1,5 +1,7 @@
 package game;
 
+import exceptions.NotRealCardException;
+
 import java.util.ArrayList;
 
 public abstract class Game {
@@ -14,7 +16,7 @@ public abstract class Game {
         return used;
     }
 
-    public boolean check(int card) {
+    public boolean check(int card) throws NotRealCardException {
         return usedTimes[card] == 1;
     }
 

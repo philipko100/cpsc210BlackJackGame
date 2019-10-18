@@ -1,5 +1,6 @@
 package players;
 
+import exceptions.NotRealBetException;
 import game.BlackJ;
 
 public interface Person {
@@ -9,7 +10,7 @@ public interface Person {
 
     //MODIFIES: this
     //EFFECTS: get and store how much this person bets in the current game
-    public void bet(int bet);
+    public void bet(int bet) throws NotRealBetException;
 
     // EFFECTS: returns the amount they bet on the current game
     public int getBet();
