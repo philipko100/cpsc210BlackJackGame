@@ -4,13 +4,15 @@ import exceptions.CardSumException;
 import exceptions.NotRealCardException;
 import game.BlackJ;
 
+import game.Times;
 import game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,9 +46,9 @@ public class GameTest {
             assertTrue(game.check(5));
             assertFalse(game.check(1));
 
-            int[] usedTimes = game.getUsedTimes();
-            assertEquals(4, usedTimes[5 - 1]);
-            ArrayList<Integer> usedCards = game.getUsedCards();
+            Map<Integer, Times> usedTimes = game.getUsedTimes();
+            assertEquals(4, usedTimes.get(5).number);
+            HashSet<Integer> usedCards = game.getUsedCards();
             assertTrue(usedCards.contains(5));
 
             game.reset();

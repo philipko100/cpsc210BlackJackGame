@@ -3,29 +3,31 @@ package game;
 import exceptions.CardSumException;
 import exceptions.NotRealCardException;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class BlackJ extends Game {
     private int totalBet = 0;
-    private ArrayList<Integer> usedCards = new ArrayList<>();
-    private int[] usedTimes = new int[13];
+    private HashSet<Integer> usedCards = new HashSet<Integer>();
+    private Map<Integer, Times> usedTimes = new HashMap<>();
 
     //MODIFIES: this
     //EFFECTS: initialize the game by declaring that none of the cards are used yet
     public BlackJ() {
-        for (int i = 0; i < 13; i++) {
-            usedTimes[i] = 0;
+        for (int i = 1; i <= 13; i++) {
+            usedTimes.put(i,new Times(0));
         }
     }
 
 
     //EFFECTS: return used card list
-    public ArrayList<Integer> getUsedCards() {
+    public HashSet<Integer> getUsedCards() {
         return usedCards;
     }
 
     //EFFECTS: return array of the used cards
-    public int[] getUsedTimes() {
+    public Map<Integer, Times> getUsedTimes() {
         return usedTimes;
     }
 
@@ -39,18 +41,18 @@ public class BlackJ extends Game {
     @Override
     public int used(int used) {
         usedCards.add(used);
-        usedTimes[used - 1] += 1;
+        usedTimes.put(used,new Times(usedTimes.get(used).number + 1));
         return used;
     }
 
-    //REQUIRES: card is less than or equal to 12 or not negative
+    //REQUIRES: card is less than or equal to 13 or not negative
     // EFFECTS: return whether the card has been used 4 times
     @Override
     public boolean check(int card) throws NotRealCardException {
         if (card > 13 || card < 0) {
             throw new NotRealCardException();
         }
-        return usedTimes[card - 1] == 4;
+        return usedTimes.get(card).number == 4;
     }
 
     // EFFECTS: returns the amount of bets on the table
@@ -59,8 +61,11 @@ public class BlackJ extends Game {
     }
 
     public void reset() {
-        usedTimes = new int[13];
-        usedCards = new ArrayList<>();
+        usedTimes = new HashMap<>();
+        usedCards = new HashSet<Integer>();
+        for (int i = 1; i <= 13; i++) {
+            usedTimes.put(i,new Times(0));
+        }
         totalBet = 0;
     }
 
