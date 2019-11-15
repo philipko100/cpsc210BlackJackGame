@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BlackJTest {
@@ -20,6 +23,7 @@ public class BlackJTest {
     BlackJ game;
     int dealerMoney;
     int userChips;
+    File file;
 
     @BeforeEach
     void beforeEach(){
@@ -29,6 +33,7 @@ public class BlackJTest {
          dealer = new Dealer(dealerMoney);
          player = new Player(userChips);
          game = new BlackJ();
+         file = new File("/Library/Java/JavaVirtualMachines/CPSC210Labs/project6/testFiles/save.txt");
     }
 
     @Test
@@ -137,7 +142,7 @@ public class BlackJTest {
     }
 
     @Test
-    void testArrangeWinnings() {
+    void testArrangeWinnings() throws IOException {
         try {
             game.addBet(1000);
             dealer.bet(500);
@@ -155,6 +160,8 @@ public class BlackJTest {
             assertEquals(dealerMoney - 500 + 1000 * 2, dealer.getChips());
             assertEquals(userChips + 1000 * 2 - 1000, player.getChips());
         } catch (NotRealException e) {
+            fail();
+        } catch (IOException e) {
             fail();
         }
         int previousPMoney = player.getChips();
@@ -181,5 +188,13 @@ public class BlackJTest {
     void testHostPlay() {
         dealer.hostPlay(game);
         assertTrue(dealer.getCardSum() >= 17);
+    }
+
+    @Test
+    void testBankRupt() {
+        player.bankRupt("player wins");
+        assertEquals(userChips, player.getChips());
+        player.bankRupt("dealer wins");
+        assertEquals(0, player.getChips());
     }
 }

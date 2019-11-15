@@ -8,10 +8,10 @@ import game.BlackJ;
 import generate.Generate;
 import ui.Main;
 
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Player implements Person, Play {
+public class Player implements Person, Participant {
     private int chips = 0;
     public int bet = 0;
     private ArrayList<Integer> cards = new ArrayList<Integer>();
@@ -91,11 +91,10 @@ public class Player implements Person, Play {
 
     // MODIFIES: this
     // EFFECTS: allows player to play the game until player dies
-    public void play(BlackJ game, Dealer dealer) {
+    public void play(BlackJ game, Dealer dealer, String line) throws IOException, NotRealBetException {
         Main main = new Main();
-        Scanner sc = new Scanner(System.in);
         while (this.getChips() != 0) {
-            main.intakeBet(this);
+            bet(Integer.parseInt(line));
             game.addBet(this.getBet());
             if (this.getBet() != 0) {
                 int[] begCards = this.dealtBegCards(game);
@@ -106,8 +105,7 @@ public class Player implements Person, Play {
             }
             String result = getWinner(game, dealer);
             arrangeWinnings(result, game, dealer);
-            if (!main.continuePlaying(this, result)) {
-                break;
+            while (!main.continuePlaying(this, result)) {
             }
         }
     }
@@ -131,8 +129,8 @@ public class Player implements Person, Play {
     }
 
     //MODIFIES: this
-    //EFFECTS: changes the net worth of each player based on who won
-    public void arrangeWinnings(String result, BlackJ game, Dealer dealer) {
+    //EFFECTS: changes the net worth of each player based on who won  //EXTRACT THIS TO INCREASE COHESION
+    public void arrangeWinnings(String result, BlackJ game, Dealer dealer) throws IOException {
         try {
             if (result.equals("player wins")) {
                 this.addOrMinusChips(game.getTotalBet());
@@ -141,15 +139,27 @@ public class Player implements Person, Play {
                 this.addOrMinusChips(-this.getBet());
                 dealer.addOrMinusChips(game.getTotalBet());
             }
+            saveGame();
             reset(dealer, game);
-        } catch (NotRealMoneyException e) {
-            if (result.equals("player wins")) {
-                System.out.println("You did so well that you bankrupted the dealer");
-            } else if (result.equals("dealer wins")) {
-                chips = 0;
-                System.out.println("You have lost all your money");
-            }
+        } catch (NotRealMoneyException | IOException e) {
+            bankRupt(result);
+            saveGame();
         }
+    }
+
+    public void bankRupt(String result) { //THIS IS THE EXTRACTED ONE
+        if (result.equals("player wins")) {
+            System.out.println("You did so well that you bankrupted the dealer");
+        } else if (result.equals("dealer wins")) {
+            chips = 0;
+            System.out.println("You have lost all your money");
+        }
+    }
+
+    private void saveGame() throws IOException {
+        PrintWriter writer = new PrintWriter("save.txt","UTF-8");
+        writer.println(this.chips);
+        writer.close();
     }
 
     private void hit(BlackJ game) {
