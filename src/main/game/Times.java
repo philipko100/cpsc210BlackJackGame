@@ -26,4 +26,14 @@ public class Times {
         return Objects.hash(number);
     }
 
+    public int numToString(String string) {
+        if (string == "zero") {
+            return 0;
+        } else if (string == "one") {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
 }

@@ -24,6 +24,7 @@ public class GameTest {
     Game g;
     int dealerMoney;
     int userChips;
+    Times times;
 
     @BeforeEach
     void beforeEach() {
@@ -34,6 +35,31 @@ public class GameTest {
         player = new Player(userChips);
         game = new BlackJ();
         g = new BlackJ();
+        times = new Times(0);
+    }
+
+    @Test
+    void testTimesNumber() {
+        assertEquals(0, times.number);
+        times = new Times(5);
+        assertEquals(5, times.number);
+    }
+
+    @Test
+    void testTimesEquals() {
+        Times times2 = new Times(2);
+        assertTrue(times.equals(times));
+        assertFalse(times.equals(null));
+        assertFalse(times.equals(times2));
+        times2 = new Times(0);
+        assertTrue(times.equals(times2));
+    }
+
+    @Test
+    void testTimesString() {
+        assertEquals(0, times.numToString("zero"));
+        assertEquals(1, times.numToString("one"));
+        assertEquals(2, times.numToString("two"));
     }
 
     @Test
