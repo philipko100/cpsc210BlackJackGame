@@ -1,5 +1,6 @@
 package placeholder;
 
+import exceptions.NotRealBetException;
 import exceptions.NotRealCardException;
 import game.BlackJ;
 import game.Game;
@@ -7,6 +8,12 @@ import generate.Generate;
 import generate.Randomize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import players.Player;
+import ui.Jdraws;
+import ui.Jgui;
+import ui.Main;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,12 +22,14 @@ public class GeneratorTest {
     Generate gen;
     Randomize ran;
     BlackJ game;
+    Player player;
 
     @BeforeEach
-    void beforeEach() {
-        gen = new Generate();
+    void beforeEach() throws NotRealBetException {
+        player = new Player(1000, new Main(), new Jgui(new Jdraws(), new Jdraws()), new Jdraws());
+        gen = player.getGen();
+        game = player.getGame();
         ran = new Randomize();
-        game = new BlackJ();
     }
 
     @Test
@@ -38,7 +47,7 @@ public class GeneratorTest {
             assertEquals(5, game.used(5));
             assertEquals(5, game.used(5));
             assertTrue(game.check(5));
-            assertTrue(gen.deal(game) != 5);
+            assertTrue(gen.deal() != 5);
         } catch (NotRealCardException e) {
             fail();
         }

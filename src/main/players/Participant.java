@@ -10,6 +10,6 @@ import java.util.List;
 public interface Participant {
 
     // MODIFIES: this
-    // EFFECTS: allows player to play the game until player dies
-    public void play(BlackJ game, Dealer dealer, String line) throws IOException, NotRealBetException;
+    // EFFECTS: allows player to save the game to come back to
+    void saveGame() throws IOException;
 }

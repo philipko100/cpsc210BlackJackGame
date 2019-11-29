@@ -4,20 +4,34 @@ import exceptions.NotRealBetException;
 import exceptions.NotRealChipOutcome;
 import game.BlackJ;
 import generate.Generate;
+import ui.Jdraws;
+import ui.Jgui;
 
+import java.io.IOException;
 import java.util.ArrayList; // import the ArrayList class
 
-public class Dealer implements Person, Host {
+//leaf
+
+public class Dealer extends Person implements Host {
     private int chips = 0;
     public int bet = 0;
     private ArrayList<Integer> cards = new ArrayList<Integer>();
-    public int cardSum = 0;
+    public int cardSum;
     private boolean isUnder21 = true;
+    BlackJ game;
+    Player player;
+    Generate gen;
+    Jdraws dealerdraws;
 
     // MODIFIES: this
     // EFFECTS: initialize person with their net worth
-    public Dealer(int chips) {
+    public Dealer(int chips, Player player, Jgui jgui) {
         this.chips = chips;
+        this.player = player;
+        game = player.game;
+        gen = player.getGen();
+        cardSum = 0;
+        dealerdraws = jgui.dealerdraws;
     }
 
     // EFFECTS: returns the amount of money they currently have
@@ -42,13 +56,15 @@ public class Dealer implements Person, Host {
 
     // MODIFIES: this
     // EFFECTS: person get the two initial cards to start the game
-    public int[] dealtBegCards(BlackJ game) {
-        Generate gen = new Generate();
+    public int[] dealtBegCards() {
+        Generate gen = new Generate(game);
         int[] beg = new int[2];
-        beg[0] = game.used(gen.deal(game));
-        beg[1] = game.used(gen.deal(game));
+        beg[0] = game.used(gen.deal());
+        beg[1] = game.used(gen.deal());
         addCard(beg[0]);
         addCard(beg[1]);
+        dealerdraws.setCards(cards);
+        dealerdraws.callRepaint();
         return beg;
     }
 
@@ -75,10 +91,11 @@ public class Dealer implements Person, Host {
 
     // MODIFIES: this
     // EFFECTS: the person receives another card from the game
-    public int dealtCard(BlackJ game) {
-        Generate gen = new Generate();
-        int newCard = gen.deal(game);
+    public int dealtCard() {
+        int newCard = gen.deal();
         addCard(newCard);
+        dealerdraws.setCards(cards);
+        dealerdraws.callRepaint();
         return game.used(newCard);
     }
 
@@ -86,13 +103,22 @@ public class Dealer implements Person, Host {
     //EFFECTS: reset cardSum
     public void resetSum() {
         cardSum = 0;
+        cards = new ArrayList<Integer>();
+        dealerdraws.setCards(cards);
+        dealerdraws.callRepaint();
     }
 
     // MODIFIES: this
     // EFFECTS: randomly plays the host or dealer of the game
-    public void hostPlay(BlackJ game) {
-        while (this.getCardSum() < 17) {
-            this.dealtCard(game);
+    public void play() throws IOException, NotRealBetException {
+        hostPlay();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: randomly plays the host or dealer of the game
+    public void hostPlay() {
+        if (this.getCardSum() < 17) {
+            this.dealtCard();
         }
     }
 }

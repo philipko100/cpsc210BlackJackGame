@@ -1,6 +1,7 @@
 package placeholder;
 
 import exceptions.CardSumException;
+import exceptions.NotRealBetException;
 import exceptions.NotRealCardException;
 import game.BlackJ;
 
@@ -10,7 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
+import ui.Jdraws;
+import ui.Jgui;
+import ui.Main;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -27,13 +32,13 @@ public class GameTest {
     Times times;
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws NotRealBetException {
         dealerMoney = 10000;
         userChips = 10000;
 
-        dealer = new Dealer(dealerMoney);
-        player = new Player(userChips);
-        game = new BlackJ();
+        player = new Player(userChips, new Main(), new Jgui(new Jdraws(), new Jdraws()), new Jdraws());
+        dealer = player.getDealer();
+        game = player.getGame();
         g = new BlackJ();
         times = new Times(0);
     }
@@ -138,31 +143,31 @@ public class GameTest {
 
             player.cardSum = 19;
             dealer.cardSum = 19;
-            assertTrue(player.getWinner(game, dealer).equals("draw"));
+            assertTrue(player.getWinner().equals("draw"));
             player.cardSum = 21;
             dealer.cardSum = 21;
-            assertTrue(player.getWinner(game, dealer).equals("draw"));
+            assertTrue(player.getWinner().equals("draw"));
             player.cardSum = 15;
             dealer.cardSum = 19;
-            assertTrue(player.getWinner(game, dealer).equals("dealer wins"));
+            assertTrue(player.getWinner().equals("dealer wins"));
             player.cardSum = 22;
             dealer.cardSum = 10;
-            assertTrue(player.getWinner(game, dealer).equals("dealer wins"));
+            assertTrue(player.getWinner().equals("dealer wins"));
             player.cardSum = 19;
             dealer.cardSum = 15;
-            assertTrue(player.getWinner(game, dealer).equals("player wins"));
+            assertTrue(player.getWinner().equals("player wins"));
             player.cardSum = 19;
             dealer.cardSum = 22;
-            assertTrue(player.getWinner(game, dealer).equals("player wins"));
+            assertTrue(player.getWinner().equals("player wins"));
         player.cardSum = -1;
         dealer.cardSum = 19;
-        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+        assertTrue(player.getWinner().equals("ERROR"));
         player.cardSum = 21;
         dealer.cardSum = -1;
-        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+        assertTrue(player.getWinner().equals("ERROR"));
         player.cardSum = -21;
         dealer.cardSum = -1;
-        assertTrue(player.getWinner(game, dealer).equals("ERROR"));
+        assertTrue(player.getWinner().equals("ERROR"));
 
     }
 }

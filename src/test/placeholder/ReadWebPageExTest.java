@@ -69,5 +69,12 @@ public class ReadWebPageExTest {
                     "  \"name\": \"Shuzenji\",\n" +
                     "  \"cod\": 200\n" +
                     "}"));
+        assertEquals("Clouds", readWeb.parse("{\"coord\":{\"lon\":-79.39,\"lat\":43.65}," +
+                "\"weather\":[{\"id\":803,\"main\":\"Clouds\",\"description\":\"broken clouds\",\"icon\":\"04d\"}]," +
+                "\"base\":\"stations\",\"main\":{\"temp\":275.01,\"pressure\":1023,\"humidity\":74,\"temp_min\"" +
+                ":273.15,\"temp_max\":277.04},\"visibility\":14484,\"wind\":{\"speed\":7.7,\"deg\":260},\"rain\"" +
+                ":{},\"clouds\":{\"all\":75},\"dt\":1573854758,\"sys\":{\"type\":1,\"id\":941,\"country\":\"CA\"," +
+                "\"sunrise\":1573819887,\"sunset\":1573854782},\"timezone\":-18000,\"id\":6167865,\"name\":\"Toronto" +
+                "\",\"cod\":200}"));
     }
 }

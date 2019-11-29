@@ -2,41 +2,49 @@ package network;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ui.Jdraws;
+import ui.Jgui;
 import ui.Main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.nio.Buffer;
 
 public class ReadWebPageEx {
 
-    String city = "";
+    public String city = "";
     String theURL = "";
     BufferedReader br = null;
     Main main = new Main();
     URL url;
     StringBuilder sb = new StringBuilder();
     String line;
+    public boolean noCity = true;
+
     public HttpURLConnection connection;
 
-    public void setURL() throws MalformedURLException {
+    public void setURL(Jgui jgui) throws MalformedURLException {
         theURL = "http://api.openweathermap.org/data/2.5/weather?q=";
-        city = main.getCity();
+        System.out.println("Which city are you in right now?");
+        jgui.printWords("Which city are you in right now?");
+        while (noCity) {
+            System.out.print("");
+        }
+        System.out.println(city);
         theURL = theURL + city + "&APPID=2f1e23b55d3aca190082997fc5e92297";
         Main main = new Main();
         url = new URL(theURL);
     }
 
-    public String getApi() throws IOException {
+    public String getApi(Jgui jgui) throws IOException {
 
         // I have used code given from the cpsc 210 personal project sample code
 
-        setURL();
+        setURL(jgui);
+        noCity = true;
 
         try {
             //Request Setup
@@ -63,7 +71,6 @@ public class ReadWebPageEx {
         connection.setRequestMethod("GET");
         connection.setConnectTimeout(20000);
         connection.setReadTimeout(20000);
-        //connection.getRequestMethod()
     }
 
     public void read() throws IOException {
