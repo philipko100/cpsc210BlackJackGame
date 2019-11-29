@@ -15,6 +15,7 @@ public class ReadWebPageExTest {
     @BeforeEach
     void beforeEach(){
         readWeb = new ReadWebPageEx();
+        readWeb.city = "Toronto";
     }
 
     /* Connection from site not set up yet

@@ -35,7 +35,11 @@ public class BlackJTest {
         userChips = 10000;
 
         player = new Player(userChips, new Main(), new Jgui(new Jdraws(),new Jdraws()), new Jdraws());
-         dealer = player.getDealer();
+         player.hit = true;
+         player.stand = false;
+        player.stop = true;
+        player.continueB = true;
+        dealer = player.getDealer();
          game = player.getGame();
          file = new File("/Library/Java/JavaVirtualMachines/CPSC210Labs/project6/testFiles/save.txt");
     }
