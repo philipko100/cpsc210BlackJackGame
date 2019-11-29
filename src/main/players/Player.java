@@ -7,9 +7,7 @@ import exceptions.NotRealMoneyException;
 import game.BlackJ;
 import generate.Generate;
 import network.ReadWebPageEx;
-import ui.Jdraws;
-import ui.Jgui;
-import ui.Main;
+import ui.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,17 +26,19 @@ public class Player extends Person implements Participant {
     public BlackJ game = new BlackJ();
     public Generate gen;
     public Main main;
-    public Jgui jgui;
+    //public Jgui jgui;
+    public GUI jgui;
     public boolean hit;
     public boolean stand;
     public boolean continueB;
     public boolean stop;
     public String city;
-    public Jdraws jdraws;
+    public Draw jdraws;
+    public boolean isTest = false;
 
     // MODIFIES: this
     // EFFECTS: initialize person with their net worth
-    public Player(int chips, Main main, Jgui jgui, Jdraws jdraws) throws NotRealBetException {
+    public Player(int chips, Main main, Jgui jgui, Jdraws jdraws, Boolean isTest) throws NotRealBetException {
         this.chips = chips;
         bet = 0;
         gen = new Generate(game);
@@ -46,7 +46,6 @@ public class Player extends Person implements Participant {
         dealer.bet(500);
         game.addBet(dealer.getBet());
         people.add(dealer);
-        this.main = main;
         this.jgui = jgui;
         hit = false;
         stand = false;
@@ -54,6 +53,23 @@ public class Player extends Person implements Participant {
         continueB = false;
         city = "";
         this.jdraws = jdraws;
+    }
+
+    public Player(int chips, Main main, Jtgraph jtgraph, Jtdone jtdone, boolean isTest) throws NotRealBetException {
+        this.chips = chips;
+        bet = 0;
+        gen = new Generate(game);
+        dealer = new Dealer(dealerMoney, this, jtdone);
+        dealer.bet(500);
+        game.addBet(dealer.getBet());
+        people.add(dealer);
+        hit = false;
+        stand = false;
+        stop = false;
+        continueB = false;
+        city = "";
+        this.jgui = jtgraph;
+        this.jdraws = jtdone;
     }
 
     public Dealer getDealer() {
@@ -64,6 +80,7 @@ public class Player extends Person implements Participant {
         return game;
     }
 
+    // -- TEST
     public Generate getGen() {
         return gen;
     }
@@ -87,13 +104,16 @@ public class Player extends Person implements Participant {
         putToGameBet(bet);
     }
 
+    // ------ TEST with bet = 100
     //MODIFIES: this
     //EFFECTS: communicate with user to store user's bet
     public void intakeBet() {
         System.out.println("How much would you like to bet this round?");
         jgui.printWords("You have $" + chips + " chips. How much would you like to bet this round?");
-        while (bet == 0) {
-            System.out.print("");
+        if (!isTest) {
+            while (bet == 0) {
+                System.out.print("");
+            }
         }
     }
 
@@ -111,9 +131,13 @@ public class Player extends Person implements Participant {
         beg[1] = game.used(gen.deal());
         addCard(beg[0]);
         addCard(beg[1]);
-        jgui.setCards(cards);
+        if (!isTest) {
+            jgui.setCards(cards);
+        }
         //jdraws.setCards(cards);
-        jdraws.callRepaint();
+        if (!isTest) {
+            jdraws.callRepaint();
+        }
         return beg;
     }
 
@@ -149,6 +173,7 @@ public class Player extends Person implements Participant {
         this.chips += chips;
     }
 
+    // ------- ! TEST with check game object
     // MODIFIES: this
     // EFFECTS: add bet to the game object
     public void putToGameBet(int bet) {
@@ -175,11 +200,15 @@ public class Player extends Person implements Participant {
         }
     }
 
+    // --------
+    //MODIFIES: this
+    //EFFECTS: reset continue settings
     public void resetContinue() {
         continueB = false;
         stop = false;
     }
 
+     //EFFECTS: check for stoped game
     public boolean stopPlaying(String result) throws IOException {
         if (stop == true) {
             stoppedGame();
@@ -192,18 +221,25 @@ public class Player extends Person implements Participant {
             jgui.printWords("The weather outside is " + r.getApi(jgui));
             System.out.println("Would you like to keep playing? Type stop to stop and anything to keep going.");
             jgui.printWords("Would you like to keep playing? Press either Continue playing or Stop playing.");
-            while (!continueB) {
-                System.out.print("");
+            if (!isTest) {
+                while (!continueB) {
+                    System.out.print("");
+                }
             }
         }
         return stop;
     }
 
+    // ----------!!!!- TEST with stop = false
+    //MODIFIES: this
+    //EFFECTS: pause the game
     public void stoppedGame() {
         jgui.printWords("You can either exit the application or continue when you wish");
         continueB = false;
-        while (stop) {
-            System.out.print("");
+        if (!isTest) {
+            while (stop) {
+                System.out.print("");
+            }
         }
         jgui.printWords("All right! We will continue playing.");
     }
@@ -248,6 +284,8 @@ public class Player extends Person implements Participant {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: bankrupts either player or dealer
     public void bankRupt(String result) { //THIS IS THE EXTRACTED ONE
         if (result.equals("player wins")) {
             cards = new ArrayList<Integer>();
@@ -288,18 +326,24 @@ public class Player extends Person implements Participant {
         }
     }
 
+    //-------------------------------------TEST
+    //MODIFIES: this
+    //EFFECTS: set all hit related variables to false
     public void resetHit() {
         hit = false;
         stand = false;
     }
 
+    //-------------------------------------TEST
     // EFFECTS: gets user choice on whether the user wants to continue playing
     public boolean hitOrStop() {
         System.out.println("If you would like to hit, type anything. Type stop to stop.");
         jgui.printWords("If you would like to hit, click Hit! Click Stand to stand.");
-        while (!hit && !stand) {
-            //System.out.println("hit : " + hit + ". stand : " + stand);
-            System.out.print("");
+        if (!isTest) {
+            while (!hit && !stand) {
+                //System.out.println("hit : " + hit + ". stand : " + stand);
+                System.out.print("");
+            }
         }
         System.out.println("hit : " + hit + ". stand : " + stand);
         return !stand;

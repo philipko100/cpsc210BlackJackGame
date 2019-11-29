@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Jdraws extends JPanel {
+public class Jdraws extends JPanel implements Draw {
     ArrayList<Integer> cards = new ArrayList<>();
     public static final int CARD_WIDTH = 50;
     public static final int CARD_HEIGHT = 80;

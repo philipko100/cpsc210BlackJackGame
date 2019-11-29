@@ -4,8 +4,10 @@ import exceptions.NotRealBetException;
 import exceptions.NotRealChipOutcome;
 import game.BlackJ;
 import generate.Generate;
+import ui.Draw;
 import ui.Jdraws;
 import ui.Jgui;
+import ui.Jtdone;
 
 import java.io.IOException;
 import java.util.ArrayList; // import the ArrayList class
@@ -21,7 +23,7 @@ public class Dealer extends Person implements Host {
     BlackJ game;
     Player player;
     Generate gen;
-    Jdraws dealerdraws;
+    Draw dealerdraws;
 
     // MODIFIES: this
     // EFFECTS: initialize person with their net worth
@@ -32,6 +34,15 @@ public class Dealer extends Person implements Host {
         gen = player.getGen();
         cardSum = 0;
         dealerdraws = jgui.dealerdraws;
+    }
+
+    public Dealer(int chips, Player player, Jtdone jtdone) {
+        this.chips = chips;
+        this.player = player;
+        game = player.game;
+        gen = player.getGen();
+        cardSum = 0;
+        dealerdraws = jtdone;
     }
 
     // EFFECTS: returns the amount of money they currently have

@@ -10,9 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
-import ui.Jdraws;
-import ui.Jgui;
-import ui.Main;
+import ui.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +32,12 @@ public class BlackJTest {
         dealerMoney = 10000;
         userChips = 10000;
 
-        player = new Player(userChips, new Main(), new Jgui(new Jdraws(),new Jdraws()), new Jdraws());
+        player = new Player(userChips, null, new Jtgraph(), new Jtdone(), true);
          player.hit = true;
          player.stand = false;
         player.stop = true;
         player.continueB = true;
+        player.isTest = true;
         dealer = player.getDealer();
          game = player.getGame();
          file = new File("/Library/Java/JavaVirtualMachines/CPSC210Labs/project6/testFiles/save.txt");

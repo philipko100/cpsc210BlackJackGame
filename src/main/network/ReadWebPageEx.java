@@ -2,6 +2,7 @@ package network;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ui.GUI;
 import ui.Jdraws;
 import ui.Jgui;
 import ui.Main;
@@ -26,7 +27,7 @@ public class ReadWebPageEx {
 
     public HttpURLConnection connection;
 
-    public void setURL(Jgui jgui) throws MalformedURLException {
+    public void setURL(GUI jgui) throws MalformedURLException {
         theURL = "http://api.openweathermap.org/data/2.5/weather?q=";
         System.out.println("Which city are you in right now?");
         jgui.printWords("Which city are you in right now?");
@@ -39,7 +40,7 @@ public class ReadWebPageEx {
         url = new URL(theURL);
     }
 
-    public String getApi(Jgui jgui) throws IOException {
+    public String getApi(GUI jgui) throws IOException {
 
         // I have used code given from the cpsc 210 personal project sample code
 

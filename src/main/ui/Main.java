@@ -41,7 +41,7 @@ public class Main {
 
         try {
 
-            Player player = new Player(main.userChips(line, jgui), main, jgui, jdraws);
+            Player player = new Player(main.userChips(line, jgui), main, jgui, jdraws, false);
             jgui.setPlayer(player);
 
             player.play();

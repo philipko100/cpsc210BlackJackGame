@@ -11,9 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
 import players.Player;
-import ui.Jdraws;
-import ui.Jgui;
-import ui.Main;
+import ui.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +34,7 @@ public class GameTest {
         dealerMoney = 10000;
         userChips = 10000;
 
-        player = new Player(userChips, new Main(), new Jgui(new Jdraws(), new Jdraws()), new Jdraws());
+        player = new Player(userChips, new Main(), new Jtgraph(), new Jtdone(), true);
         dealer = player.getDealer();
         game = player.getGame();
         g = new BlackJ();

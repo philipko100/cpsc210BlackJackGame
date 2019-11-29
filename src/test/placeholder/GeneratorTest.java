@@ -9,9 +9,7 @@ import generate.Randomize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Player;
-import ui.Jdraws;
-import ui.Jgui;
-import ui.Main;
+import ui.*;
 
 import java.util.ArrayList;
 
@@ -26,7 +24,7 @@ public class GeneratorTest {
 
     @BeforeEach
     void beforeEach() throws NotRealBetException {
-        player = new Player(1000, new Main(), new Jgui(new Jdraws(), new Jdraws()), new Jdraws());
+        player = new Player(1000, new Main(), new Jtgraph(), new Jtdone(), true);
         gen = player.getGen();
         game = player.getGame();
         ran = new Randomize();
