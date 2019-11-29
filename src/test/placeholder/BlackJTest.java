@@ -6,6 +6,7 @@ import exceptions.NotRealException;
 import game.BlackJ;
 
 import game.Game;
+import generate.Generate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import players.Dealer;
@@ -193,9 +194,52 @@ public class BlackJTest {
     }
 
     @Test
+    void testGetGen() {
+        Generate gen = new Generate(new BlackJ());
+        player.setGen(gen);
+        assertEquals(gen, player.getGen());
+    }
+
+    @Test
+    void testStoppedGame() {
+        player.isTest = true;
+        player.stoppedGame();
+        assertFalse(player.continueB);
+    }
+
+    @Test
+    void testResetHit() {
+        player.resetHit();
+        assertFalse(player.hit);
+        assertFalse(player.stand);
+    }
+
+    @Test
+    void testPutToGameBet() {
+        player.game = new BlackJ();
+        player.putToGameBet(100);
+        assertEquals(100 * 2, player.game.getTotalBet());
+    }
+
+    @Test
+    void testIntakeBet() {
+        player.bet = 100;
+        player.intakeBet();
+        assertTrue(player.isTest);
+    }
+
+
+    @Test
     void testHostPlay() {
         dealer.hostPlay();
         //assertTrue(dealer.getCardSum() >= 17);
+    }
+
+    @Test
+    void testHitOrStop() {
+        player.isTest = true;
+        player.stand = true;
+        assertFalse(player.hitOrStop());
     }
 
     @Test

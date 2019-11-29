@@ -80,9 +80,12 @@ public class Player extends Person implements Participant {
         return game;
     }
 
-    // -- TEST
     public Generate getGen() {
         return gen;
+    }
+
+    public void setGen(Generate gen) {
+        this.gen = gen;
     }
 
     // EFFECTS: returns the amount of money they currently have
@@ -104,7 +107,6 @@ public class Player extends Person implements Participant {
         putToGameBet(bet);
     }
 
-    // ------ TEST with bet = 100
     //MODIFIES: this
     //EFFECTS: communicate with user to store user's bet
     public void intakeBet() {
@@ -114,6 +116,9 @@ public class Player extends Person implements Participant {
             while (bet == 0) {
                 System.out.print("");
             }
+        } else {
+            System.out.println("Is in a test");
+            isTest = true;
         }
     }
 
@@ -173,7 +178,6 @@ public class Player extends Person implements Participant {
         this.chips += chips;
     }
 
-    // ------- ! TEST with check game object
     // MODIFIES: this
     // EFFECTS: add bet to the game object
     public void putToGameBet(int bet) {
@@ -230,7 +234,6 @@ public class Player extends Person implements Participant {
         return stop;
     }
 
-    // ----------!!!!- TEST with stop = false
     //MODIFIES: this
     //EFFECTS: pause the game
     public void stoppedGame() {
@@ -326,7 +329,6 @@ public class Player extends Person implements Participant {
         }
     }
 
-    //-------------------------------------TEST
     //MODIFIES: this
     //EFFECTS: set all hit related variables to false
     public void resetHit() {
