@@ -6,6 +6,7 @@ public class Jtdone implements Draw {
     int num = 0;
     ArrayList<Integer> cards = new ArrayList<Integer>();
 
+    //EFECTS: changes number to one
     public void setCards(ArrayList<Integer> list) {
         num = 1;
     }
@@ -14,6 +15,7 @@ public class Jtdone implements Draw {
         return new ArrayList<Integer>();
     }
 
+    //EFFECTS: changes users to oppposite
     public boolean changeUser() {
         return false;
     }
@@ -22,6 +24,7 @@ public class Jtdone implements Draw {
         return true;
     }
 
+    //EFFECTS: changes number to 10
     public void callRepaint() {
         num = 10;
     }

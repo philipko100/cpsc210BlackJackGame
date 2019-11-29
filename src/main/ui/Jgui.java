@@ -48,7 +48,8 @@ public class Jgui extends JComponent implements GUI {
         initializeJ();
     }
 
-
+    //MODIFIES: this
+    //EFECTS: changes card list to given
     public void setCards(ArrayList<Integer> cards) {
         this.cards = cards;
         jdraws.setCards(cards);
@@ -59,10 +60,12 @@ public class Jgui extends JComponent implements GUI {
     }
 
 
+    //EFFECTS: changes rwebCon to given
     public void setR(ReadWebPageEx r) {
         this.rwebCon = r;
     }
 
+    //EFFECTS: changes the numofParts variable to given
     public int setNumParts(int num) {
         numOfParts = num;
         return numOfParts;
@@ -72,11 +75,14 @@ public class Jgui extends JComponent implements GUI {
         return numOfParts;
     }
 
+    //EFFECTS: set Jpanels to gui
     public void drawsToTops() {
         secondTop = jdraws;
         thirdTop = dealerdraws;
     }
 
+    // MODIFIES this
+    //EFFECTS: initializes Jframe and adds all jpanels
     public void initializeJ() {
         frame = new JFrame("My First GUI");
         frame = setFrame(frame);
@@ -100,6 +106,8 @@ public class Jgui extends JComponent implements GUI {
     }
 
 
+    //MODIFIES this
+    //EFFECTS: initialize betting jpanel
     public JPanel initializeFirst(JPanel panel) {
         betLabel = new JLabel("Bet Amount: ");
         betInput = new JTextField(16);
@@ -110,7 +118,7 @@ public class Jgui extends JComponent implements GUI {
         return panel;
     }
 
-    public JButton createBetButton(JButton button) {
+    JButton createBetButton(JButton button) {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,7 +132,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JPanel initializeSecond(JPanel panel) {
+    JPanel initializeSecond(JPanel panel) {
         torontoBtn = createTorontoButton(new JButton("Toronto"));
         vancouverBtn = createVancouverButton(new JButton("Vancouver"));
         nyBtn = createNewYorkButton(new JButton("New York"));
@@ -136,7 +144,7 @@ public class Jgui extends JComponent implements GUI {
         return panel;
     }
 
-    public JButton createTorontoButton(JButton button) {
+    JButton createTorontoButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / numOfParts - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -149,7 +157,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createVancouverButton(JButton button) {
+    JButton createVancouverButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / numOfParts - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -162,7 +170,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createNewYorkButton(JButton button) {
+    JButton createNewYorkButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / numOfParts - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -175,7 +183,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createLAButton(JButton button) {
+    JButton createLAButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / numOfParts - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -192,14 +200,14 @@ public class Jgui extends JComponent implements GUI {
         this.player = player;
     }
 
-    public JFrame setFrame(JFrame frame) {
+    JFrame setFrame(JFrame frame) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH,FRAME_HEIGHT);
         frame.setLayout(new GridLayout(numOfParts,1));
         return frame;
     }
 
-    public JPanel setBottom(JPanel panel) {
+    JPanel setBottom(JPanel panel) {
         hitButton = createHitButton(new JButton("Hit"));
         standButton = createStandButton(new JButton("Stand"));
         stopButton = createStopButton(new JButton("Stop Game"));
@@ -211,11 +219,12 @@ public class Jgui extends JComponent implements GUI {
         return panel;
     }
 
+    //EFFECTS: print the words in the text area
     public void printWords(String string) {
         textArea.append(string + "\n");
     }
 
-    public JButton createHitButton(JButton button) {
+    JButton createHitButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / 4 - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -227,7 +236,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createStandButton(JButton button) {
+    JButton createStandButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / 4 - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -239,7 +248,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createStopButton(JButton button) {
+    JButton createStopButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / 4 - 50));
         button.addActionListener(new ActionListener() {
             @Override
@@ -252,7 +261,7 @@ public class Jgui extends JComponent implements GUI {
         return button;
     }
 
-    public JButton createContinueButton(JButton button) {
+    JButton createContinueButton(JButton button) {
         button.setPreferredSize(new Dimension(FRAME_WIDTH / 4 - 50, FRAME_HEIGHT / 4 - 50));
         button.addActionListener(new ActionListener() {
             @Override

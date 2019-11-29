@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BlackJTest {
 
     Player player;
+    Player player2;
     Dealer dealer;
     BlackJ game;
     int dealerMoney;
@@ -34,7 +35,8 @@ public class BlackJTest {
         userChips = 10000;
 
         player = new Player(userChips, null, new Jtgraph(), new Jtdone(), true);
-         player.hit = true;
+         player2 = new Player(userChips, null, null, null, false);
+        player.hit = true;
          player.stand = false;
         player.stop = true;
         player.continueB = true;
@@ -131,7 +133,18 @@ public class BlackJTest {
         }
     }
 
-
+    @Test
+    void testResetBetContinue() {
+        player.bet = 0;
+        player.resetBetContinue();
+        assertFalse(player.continueB || player.stop);
+        player.bet = -1;
+        player.resetBetContinue();
+        assertTrue(!player.continueB && player.stop);
+        player.bet = 1;
+        player.resetBetContinue();
+        assertTrue(player.continueB && player.stop);
+    }
 
     @Test
     void testReset() {
@@ -237,6 +250,19 @@ public class BlackJTest {
         } catch (Exception e) {
             fail();
         }
+    }
+
+    @Test
+    void testSetResetTrue() {
+        player.bet = 0;
+        player.resetBetHit();
+        assertFalse(player.hit || player.stand);
+        player.bet = -1;
+        player.resetBetHit();
+        assertTrue(!player.hit && player.stand);
+        player.bet = 1;
+        player.resetBetHit();
+        assertTrue(player.hit && player.stand);
     }
 
     @Test

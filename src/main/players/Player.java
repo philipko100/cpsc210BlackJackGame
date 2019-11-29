@@ -204,12 +204,26 @@ public class Player extends Person implements Participant {
         }
     }
 
-    // --------
     //MODIFIES: this
     //EFFECTS: reset continue settings
     public void resetContinue() {
         continueB = false;
         stop = false;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: reset continue settings based on bet
+    public void resetBetContinue() {
+        if (bet == 0) {
+            continueB = false;
+            stop = false;
+        } else if (bet < 0) {
+            continueB = false;
+            stop = true;
+        } else {
+            continueB = true;
+            stop = true;
+        }
     }
 
      //EFFECTS: check for stoped game
@@ -336,7 +350,21 @@ public class Player extends Person implements Participant {
         stand = false;
     }
 
-    //-------------------------------------TEST
+    // MODIFIES this
+    // EFFECTS: changes the reset values based on bet
+    public void resetBetHit() {
+        if (bet == 0) {
+            hit = false;
+            stand = false;
+        } else if (bet < 0) {
+            hit = false;
+            stand = true;
+        } else {
+            hit = true;
+            stand = true;
+        }
+    }
+
     // EFFECTS: gets user choice on whether the user wants to continue playing
     public boolean hitOrStop() {
         System.out.println("If you would like to hit, type anything. Type stop to stop.");

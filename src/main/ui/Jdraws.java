@@ -14,6 +14,8 @@ public class Jdraws extends JPanel implements Draw {
     public boolean user = false;
 
 
+    //MODIFIES: this
+    //EFECTS: changes card list to given
     public void setCards(ArrayList<Integer> cards) {
         this.cards = cards;
     }
@@ -22,6 +24,8 @@ public class Jdraws extends JPanel implements Draw {
         return cards;
     }
 
+    //MODIFES: this
+    //EFFECTS: changes users to oppposite
     public boolean changeUser() {
         user = !user;
         return user;
@@ -31,6 +35,7 @@ public class Jdraws extends JPanel implements Draw {
         return user;
     }
 
+    //EFFECTS: calls paint
     public void callRepaint() {
         repaint();
     }
