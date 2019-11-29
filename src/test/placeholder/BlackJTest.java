@@ -231,8 +231,12 @@ public class BlackJTest {
 
     @Test
     void testHostPlay() {
-        dealer.hostPlay();
-        //assertTrue(dealer.getCardSum() >= 17);
+        try {
+            dealer.play();
+            dealer.hostPlay();
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test
